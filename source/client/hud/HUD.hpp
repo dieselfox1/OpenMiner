@@ -34,6 +34,7 @@
 #include "client/hud/DebugLightmapViewer.hpp"
 #include "client/hud/DebugOverlay.hpp"
 #include "client/hud/DebugProfilerWindow.hpp"
+#include "client/hud/HeldItem.hpp"
 #include "client/hud/Hotbar.hpp"
 #include "client/hud/Minimap.hpp"
 #include "client/graphics/Shader.hpp"
@@ -42,53 +43,55 @@
 struct GuiScaleChangedEvent;
 
 class HUD : public Transformable, public Drawable {
-	public:
-		HUD(ClientPlayer &player, ClientWorld &world, ClientCommandHandler &client);
+public:
+	HUD(ClientPlayer& player, ClientWorld& world, ClientCommandHandler& client);
 
-		void setup();
+	void setup();
 
-		void onEvent(const SDL_Event &event);
-		void onGuiScaleChanged(const GuiScaleChangedEvent &event);
+	void onEvent(const SDL_Event& event);
+	void onGuiScaleChanged(const GuiScaleChangedEvent& event);
 
-		void update();
+	void update();
 
-		void pause() { m_blockCursor.reset(); }
+	void pause() { m_blockCursor.reset(); m_heldItem.stopSwinging(); }
 
-		const BlockCursor &blockCursor() const { return m_blockCursor; }
+	const BlockCursor& blockCursor() const { return m_blockCursor; }
 
-		Chat &chat() { return m_chat; }
+	Chat& chat() { return m_chat; }
 
-		Minimap &minimap() { return m_minimap; }
+	Minimap& minimap() { return m_minimap; }
 
-	private:
-		void draw(RenderTarget &target, RenderStates states) const override;
+private:
+	void draw(RenderTarget& target, RenderStates states) const override;
 
-		ClientPlayer &m_player;
-		ClientWorld &m_world;
+	ClientPlayer& m_player;
+	ClientWorld& m_world;
 
-		Shader m_shader;
-		View m_view;
+	Shader m_shader;
+	View m_view;
 
-		Hotbar m_hotbar;
+	Hotbar m_hotbar;
 
-		BlockCursor m_blockCursor;
-		Crosshair m_crosshair;
+	HeldItem m_heldItem;
 
-		DebugOverlay m_debugOverlay;
-		bool m_isDebugOverlayVisible = false;
-		bool m_printRendererInfo = false;
+	BlockCursor m_blockCursor;
+	Crosshair m_crosshair;
 
-		BlockInfoWidget m_blockInfoWidget;
+	DebugOverlay m_debugOverlay;
+	bool m_isDebugOverlayVisible = false;
+	bool m_printRendererInfo = false;
 
-		Text m_fpsText;
+	BlockInfoWidget m_blockInfoWidget;
 
-		Chat m_chat;
+	Text m_fpsText;
 
-		Minimap m_minimap;
+	Chat m_chat;
 
-		DebugLightmapViewer m_debugLightmapViewer;
+	Minimap m_minimap;
 
-		DebugProfilerWindow m_debugProfilerWindow;
+	DebugLightmapViewer m_debugLightmapViewer;
+
+	DebugProfilerWindow m_debugProfilerWindow;
 };
 
 #endif // HUD_HPP_

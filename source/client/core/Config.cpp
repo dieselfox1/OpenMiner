@@ -46,6 +46,7 @@ bool Config::isBlockInfoWidgetEnabled = true;
 bool Config::isFpsCounterEnabled = true;
 bool Config::isHotbarVisible = true;
 bool Config::isCrosshairVisible = true;
+bool Config::isHeldItemVisible = true;
 
 // Graphics
 u16 Config::renderDistance = 8;
@@ -76,7 +77,7 @@ std::string Config::defaultUsername = "";
 std::string Config::defaultServerAddress = "localhost:4242";
 std::string Config::texturePack = "";
 
-void Config::loadConfigFromFile(const char *filename) {
+void Config::loadConfigFromFile(const char* filename) {
 	if (!fs::exists("config") && !fs::create_directory("config")) {
 		logError() << "Failed to create 'config' folder";
 		return;
@@ -96,6 +97,7 @@ void Config::loadConfigFromFile(const char *filename) {
 			isFpsCounterEnabled = lua["isFpsCounterEnabled"].get_or(isFpsCounterEnabled);
 			isHotbarVisible = lua["isHotbarVisible"].get_or(isHotbarVisible);
 			isCrosshairVisible = lua["isCrosshairVisible"].get_or(isCrosshairVisible);
+			isHeldItemVisible = lua["isHeldItemVisible"].get_or(isHeldItemVisible);
 
 			renderDistance = lua["renderDistance"].get_or(renderDistance);
 			ambientOcclusion = std::clamp<u8>(lua["ambientOcclusion"].get_or(ambientOcclusion), 0, 2);
@@ -123,14 +125,14 @@ void Config::loadConfigFromFile(const char *filename) {
 
 			logInfo() << "Config file loaded successfully";
 		}
-		catch (sol::error &e) {
+		catch (sol::error& e) {
 			logError() << e.what();
 		}
 	}
 }
 
-void Config::saveConfigToFile(const char *filename) {
-	std::ofstream file{filename, std::ofstream::out | std::ofstream::trunc};
+void Config::saveConfigToFile(const char* filename) {
+	std::ofstream file{ filename, std::ofstream::out | std::ofstream::trunc };
 	file << "isFlyModeEnabled = " << (isFlyModeEnabled ? "true" : "false") << std::endl;
 	file << "isNoClipEnabled = " << (isNoClipEnabled ? "true" : "false") << std::endl;
 	file << "maxBlockReach = " << maxBlockReach << std::endl;
@@ -139,6 +141,7 @@ void Config::saveConfigToFile(const char *filename) {
 	file << "isFpsCounterEnabled = " << (isFpsCounterEnabled ? "true" : "false") << std::endl;
 	file << "isHotbarVisible = " << (isHotbarVisible ? "true" : "false") << std::endl;
 	file << "isCrosshairVisible = " << (isCrosshairVisible ? "true" : "false") << std::endl;
+	file << "isHeldItemVisible = " << (isHeldItemVisible ? "true" : "false") << std::endl;
 	file << std::endl;
 	file << "renderDistance = " << renderDistance << std::endl;
 	file << "ambientOcclusion = " << (u16)ambientOcclusion << std::endl;
@@ -162,5 +165,5 @@ void Config::saveConfigToFile(const char *filename) {
 	file << std::endl;
 	file << "defaultUsername = \"" << defaultUsername << "\"" << std::endl;
 	file << "defaultServerAddress = \"" << defaultServerAddress << "\"" << std::endl;
-	file << "texturePack = \"" << texturePack  << "\"" << std::endl;
+	file << "texturePack = \"" << texturePack << "\"" << std::endl;
 }

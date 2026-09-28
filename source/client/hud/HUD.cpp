@@ -35,7 +35,7 @@
 #include "client/network/ClientCommandHandler.hpp"
 #include "client/world/ClientPlayer.hpp"
 
-HUD::HUD(ClientPlayer &player, ClientWorld &world, ClientCommandHandler &client)
+HUD::HUD(ClientPlayer& player, ClientWorld& world, ClientCommandHandler& client)
 	: m_player(player), m_world(world),
 	m_hotbar(player, client),
 	m_blockCursor(player, world, client),
@@ -59,6 +59,8 @@ void HUD::setup() {
 		Config::screenHeight / getScale().y - (float)m_hotbar.height()
 	);
 
+	m_heldItem.setup();
+
 	m_blockInfoWidget.setPosition(Config::screenWidth / getScale().x / 2.f - (float)m_blockInfoWidget.width() / 2.f, 2.f);
 
 	m_fpsText.setPosition(Config::screenWidth / getScale().x - 36.f, 2.f);
@@ -74,7 +76,7 @@ void HUD::setup() {
 	m_debugProfilerWindow.setPosition(2.f, 2.f);
 }
 
-void HUD::onEvent(const SDL_Event &event) {
+void HUD::onEvent(const SDL_Event& event) {
 	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_F3) {
 		m_isDebugOverlayVisible ^= 1;
 		m_printRendererInfo = event.key.keysym.mod & KMOD_SHIFT;
@@ -82,6 +84,13 @@ void HUD::onEvent(const SDL_Event &event) {
 
 	if (Config::isHotbarVisible)
 		m_hotbar.onEvent(event);
+
+	if (event.type == SDL_MOUSEBUTTONDOWN
+		&& (event.button.button == SDL_BUTTON_LEFT || event.button.button == SDL_BUTTON_RIGHT))
+		m_heldItem.startSwinging();
+	else if (event.type == SDL_MOUSEBUTTONUP
+		&& !(SDL_GetMouseState(nullptr, nullptr) & (SDL_BUTTON_LMASK | SDL_BUTTON_RMASK)))
+		m_heldItem.stopSwinging();
 
 	m_blockCursor.onEvent(event, m_hotbar);
 
@@ -92,7 +101,7 @@ void HUD::onEvent(const SDL_Event &event) {
 		m_debugProfilerWindow.onEvent(event);
 }
 
-void HUD::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
+void HUD::onGuiScaleChanged(const GuiScaleChangedEvent& event) {
 	setScale(event.guiScale, event.guiScale, 1);
 
 	setup();
@@ -102,6 +111,9 @@ void HUD::update() {
 	// FIXME: Shouldn't be called every tick
 	if (Config::isHotbarVisible)
 		m_hotbar.update();
+
+	if (Config::isHeldItemVisible)
+		m_heldItem.update(m_hotbar);
 
 	if (Config::isFpsCounterEnabled)
 		m_fpsText.setString(std::to_string(GameClock::getInstance().getFpsAverage()) + " FPS");
@@ -127,7 +139,7 @@ void HUD::update() {
 		m_debugLightmapViewer.update(m_world);
 }
 
-void HUD::draw(RenderTarget &target, RenderStates states) const {
+void HUD::draw(RenderTarget& target, RenderStates states) const {
 	OM_PROFILE_START("HUD::draw");
 
 	target.setView(m_view);
@@ -135,6 +147,9 @@ void HUD::draw(RenderTarget &target, RenderStates states) const {
 	states.shader = &m_shader;
 
 	states.transform *= getTransform();
+
+	if (Config::isHeldItemVisible)
+		target.draw(m_heldItem, states);
 
 	if (m_isDebugOverlayVisible)
 		target.draw(m_debugOverlay, states);

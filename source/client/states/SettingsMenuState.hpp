@@ -37,55 +37,55 @@ struct GuiScaleChangedEvent;
 class Key;
 
 class SettingsMenuState : public InterfaceState {
-	public:
-		SettingsMenuState(DrawableState *parent = nullptr);
+public:
+	SettingsMenuState(DrawableState* parent = nullptr);
 
-		void init() override;
+	void init() override;
 
-		void onEvent(const SDL_Event &event) override;
+	void onEvent(const SDL_Event& event) override;
 
-	private:
-		void onGuiScaleChanged(const GuiScaleChangedEvent &event);
+private:
+	void onGuiScaleChanged(const GuiScaleChangedEvent& event);
 
-		void updateWidgetPosition() override;
+	void updateWidgetPosition() override;
 
-		void doneButtonAction();
+	void doneButtonAction();
 
-		void addMainButtons();
-		void addGameplayButtons();
-		void addInterfaceButtons();
-		void addGraphicsButtons();
-		void addInputButtons();
-		void addDebugButtons();
+	void addMainButtons();
+	void addGameplayButtons();
+	void addInterfaceButtons();
+	void addGraphicsButtons();
+	void addInputButtons();
+	void addDebugButtons();
 
-		TextButton &addToggleButton(const std::string &text, bool &configOption, bool worldReloadRequested = false);
+	TextButton& addToggleButton(const std::string& text, bool& configOption, bool worldReloadRequested = false);
 
-		void draw(RenderTarget &target, RenderStates states) const override;
+	void draw(RenderTarget& target, RenderStates states) const override;
 
-		Image m_background{"texture-menu_background"};
-		RectangleShape m_filter1;
-		RectangleShape m_filter2;
+	Image m_background{ "texture-menu_background" };
+	RectangleShape m_filter1;
+	RectangleShape m_filter2;
 
-		Text m_title;
+	Text m_title;
 
-		MenuWidget m_menuWidget;
-		TextButton m_doneButton;
+	MenuWidget m_menuWidget;
+	TextButton m_doneButton;
 
-		u16 m_currentKey = GameKey::Undefined;
-		TextButton *m_currentKeyButton = nullptr;
-		Key *m_key = nullptr;
+	u16 m_currentKey = GameKey::Undefined;
+	TextButton* m_currentKeyButton = nullptr;
+	Key* m_key = nullptr;
 
-		enum class MenuState {
-			Main,
-			Gameplay,
-			Graphics,
-			Input,
-			Debug
-		};
+	enum class MenuState {
+		Main,
+		Gameplay,
+		Graphics,
+		Input,
+		Debug
+	};
 
-		MenuState m_state = MenuState::Main;
+	MenuState m_state = MenuState::Main;
 
-		TextButton *m_resolutionButton = nullptr;
+	TextButton* m_resolutionButton = nullptr;
 };
 
 #endif // SETTINGSMENUSTATE_HPP_

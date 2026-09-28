@@ -67,6 +67,7 @@ set(SOURCE_FILES
 	hud/DebugOverlay.cpp
 	hud/DebugProfilerWindow.cpp
 	hud/HUD.cpp
+	hud/HeldItem.cpp
 	hud/Hotbar.cpp
 	hud/Minimap.cpp
 
@@ -172,6 +173,7 @@ set(HEADER_FILES
 	hud/DebugOverlay.hpp
 	hud/DebugProfilerWindow.hpp
 	hud/HUD.hpp
+	hud/HeldItem.hpp
 	hud/Hotbar.hpp
 	hud/Minimap.hpp
 

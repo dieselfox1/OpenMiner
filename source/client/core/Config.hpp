@@ -42,6 +42,7 @@ namespace Config {
 	extern bool isFpsCounterEnabled;
 	extern bool isHotbarVisible;
 	extern bool isCrosshairVisible;
+	extern bool isHeldItemVisible;
 
 	// Graphics
 	extern u16 renderDistance;
@@ -72,8 +73,8 @@ namespace Config {
 	extern std::string defaultServerAddress;
 	extern std::string texturePack;
 
-	void loadConfigFromFile(const char *filename);
-	void saveConfigToFile(const char *filename);
+	void loadConfigFromFile(const char* filename);
+	void saveConfigToFile(const char* filename);
 }
 
 #endif // CONFIG_HPP_
