@@ -37,56 +37,56 @@ class Camera;
 class ClientWorld;
 
 class ClientPlayer : public Player {
-	public:
-		ClientPlayer(Camera &camera);
+public:
+	ClientPlayer(Camera& camera);
 
-		void turnH(float angle);
-		void turnViewV(float angle);
+	void turnH(float angle);
+	void turnViewV(float angle);
 
-		void updateCamera();
+	void updateCamera();
 
-		void move(float direction);
+	void move(float direction);
 
-		void processInputs();
-		void updatePosition(const ClientWorld &world);
+	void processInputs();
+	void updatePosition(const ClientWorld& world);
 
-		void checkCollisions(const ClientWorld &world);
+	void checkCollisions(const ClientWorld& world);
 
-		float dirTargetedX() const { return m_forwardDir.x; }
-		float dirTargetedY() const { return m_forwardDir.y; }
-		float dirTargetedZ() const { return m_forwardDir.z; }
+	float dirTargetedX() const { return m_forwardDir.x; }
+	float dirTargetedY() const { return m_forwardDir.y; }
+	float dirTargetedZ() const { return m_forwardDir.z; }
 
-		static ClientPlayer &getInstance() { return *s_instance; }
-		static void setInstance(ClientPlayer *instance) { s_instance = instance; }
+	static ClientPlayer& getInstance() { return *s_instance; }
+	static void setInstance(ClientPlayer* instance) { s_instance = instance; }
 
-		void setPosition(double x, double y, double z);
-		void setCameraRoll(float angle) { m_viewAngleRoll = angle; updateCamera(); };
+	void setPosition(double x, double y, double z);
+	void setCameraRoll(float angle) { m_viewAngleRoll = angle; updateCamera(); };
 
-		Camera &camera() { return m_camera; }
+	Camera& camera() { return m_camera; }
 
-	private:
-		void testPoint(const ClientWorld &world, double x, double y, double z, Vector3f &vel);
+private:
+	void testPoint(const ClientWorld& world, double x, double y, double z, Vector3f& vel);
 
-		void applyViewBobbing(float &viewAngleH, float &viewAngleV, float &viewAngleRoll);
+	void applyViewBobbing(float& viewAngleH, float& viewAngleV, float& viewAngleRoll);
 
-		static ClientPlayer *s_instance;
+	static ClientPlayer* s_instance;
 
-		Camera &m_camera;
+	Camera& m_camera;
 
-		Vector3f m_forwardDir;
+	Vector3f m_forwardDir;
 
-		Vector3f m_cameraLocalPos;
+	Vector3f m_cameraLocalPos;
 
-		Vector3f m_velocity{0, 0, 0};
+	Vector3f m_velocity{ 0, 0, 0 };
 
-		// For view bobbing only
-		bool m_isMoving = false;
-		u64 m_movementStartTime = 0;
+	// For view bobbing only
+	bool m_isMoving = false;
+	u64 m_movementStartTime = 0;
 
-		bool m_isJumping = false;
-		const float m_jumpSpeed = 0.06f;
+	bool m_isJumping = false;
+	const float m_jumpSpeed = 0.06f;
 
-		std::optional<Vector3i> m_lastChunkPos;
+	std::optional<Vector3i> m_lastChunkPos;
 };
 
 #endif // CLIENTPLAYER_HPP_

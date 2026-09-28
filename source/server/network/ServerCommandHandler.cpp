@@ -39,7 +39,7 @@
 #include "server/world/ServerItem.hpp"
 #include "server/world/WorldController.hpp"
 
-void ServerCommandHandler::sendServerTick(const ClientInfo *client) const {
+void ServerCommandHandler::sendServerTick(const ClientInfo* client) const {
 	Network::Packet packet;
 	packet << Network::Command::ServerTick << (sf::Uint64)GameTime::getTicks();
 
@@ -49,7 +49,7 @@ void ServerCommandHandler::sendServerTick(const ClientInfo *client) const {
 		client->tcpSocket->send(packet);
 }
 
-void ServerCommandHandler::sendServerClosed(const std::string &message, ClientInfo *client) const {
+void ServerCommandHandler::sendServerClosed(const std::string& message, ClientInfo* client) const {
 	Network::Packet packet;
 	packet << Network::Command::ServerClosed << message;
 
@@ -63,7 +63,7 @@ void ServerCommandHandler::sendServerClosed(const std::string &message, ClientIn
 	}
 }
 
-void ServerCommandHandler::sendChunkUnload(s32 chunkX, s32 chunkY, s32 chunkZ, const ClientInfo *client) const {
+void ServerCommandHandler::sendChunkUnload(s32 chunkX, s32 chunkY, s32 chunkZ, const ClientInfo* client) const {
 	Network::Packet packet;
 	packet << Network::Command::ChunkUnload << chunkX << chunkY << chunkZ;
 
@@ -73,7 +73,7 @@ void ServerCommandHandler::sendChunkUnload(s32 chunkX, s32 chunkY, s32 chunkZ, c
 		client->tcpSocket->send(packet);
 }
 
-void ServerCommandHandler::sendBlockDataUpdate(s32 x, s32 y, s32 z, const BlockData *blockData, const ClientInfo *client) const {
+void ServerCommandHandler::sendBlockDataUpdate(s32 x, s32 y, s32 z, const BlockData* blockData, const ClientInfo* client) const {
 	Network::Packet packet;
 	packet << Network::Command::BlockDataUpdate << x << y << z << blockData->meta;
 
@@ -83,7 +83,7 @@ void ServerCommandHandler::sendBlockDataUpdate(s32 x, s32 y, s32 z, const BlockD
 		client->tcpSocket->send(packet);
 }
 
-void ServerCommandHandler::sendBlockInvUpdate(s32 x, s32 y, s32 z, const Inventory &inventory, const ClientInfo *client) const {
+void ServerCommandHandler::sendBlockInvUpdate(s32 x, s32 y, s32 z, const Inventory& inventory, const ClientInfo* client) const {
 	Network::Packet packet;
 	packet << Network::Command::BlockInvUpdate << x << y << z << inventory;
 
@@ -93,8 +93,8 @@ void ServerCommandHandler::sendBlockInvUpdate(s32 x, s32 y, s32 z, const Invento
 		client->tcpSocket->send(packet);
 }
 
-void ServerCommandHandler::sendPlayerPosUpdate(u16 clientID, bool isTeleportation, const ClientInfo *client) const {
-	const ServerPlayer *player = m_players.getPlayerFromClientID(clientID);
+void ServerCommandHandler::sendPlayerPosUpdate(u16 clientID, bool isTeleportation, const ClientInfo* client) const {
+	const ServerPlayer* player = m_players.getPlayerFromClientID(clientID);
 	if (player) {
 		Network::Packet packet;
 		packet << Network::Command::PlayerPosUpdate;
@@ -111,8 +111,8 @@ void ServerCommandHandler::sendPlayerPosUpdate(u16 clientID, bool isTeleportatio
 		logError() << ("Failed to send position update for player " + std::to_string(clientID) + ": Player not found").c_str();
 }
 
-void ServerCommandHandler::sendPlayerRotUpdate(u16 clientID, const ClientInfo *client) const {
-	const ServerPlayer *player = m_players.getPlayerFromClientID(clientID);
+void ServerCommandHandler::sendPlayerRotUpdate(u16 clientID, const ClientInfo* client) const {
+	const ServerPlayer* player = m_players.getPlayerFromClientID(clientID);
 	if (player) {
 		Network::Packet packet;
 		packet << Network::Command::PlayerRotUpdate;
@@ -128,8 +128,8 @@ void ServerCommandHandler::sendPlayerRotUpdate(u16 clientID, const ClientInfo *c
 		logError() << ("Failed to send rotation update for player " + std::to_string(clientID) + ": Player not found").c_str();
 }
 
-void ServerCommandHandler::sendPlayerInvUpdate(u16 clientID, const ClientInfo *client) const {
-	ServerPlayer *player = m_players.getPlayerFromClientID(clientID);
+void ServerCommandHandler::sendPlayerInvUpdate(u16 clientID, const ClientInfo* client) const {
+	ServerPlayer* player = m_players.getPlayerFromClientID(clientID);
 	if (player) {
 		Network::Packet packet;
 		packet << Network::Command::PlayerInvUpdate;
@@ -144,8 +144,8 @@ void ServerCommandHandler::sendPlayerInvUpdate(u16 clientID, const ClientInfo *c
 		logError() << ("Failed to send inventory update for player " + std::to_string(clientID) + ": Player not found").c_str();
 }
 
-void ServerCommandHandler::sendPlayerChangeDimension(u16 clientID, s32 x, s32 y, s32 z, u16 dimension, const ClientInfo *client) const {
-	ServerPlayer *player = m_players.getPlayerFromClientID(clientID);
+void ServerCommandHandler::sendPlayerChangeDimension(u16 clientID, s32 x, s32 y, s32 z, u16 dimension, const ClientInfo* client) const {
+	ServerPlayer* player = m_players.getPlayerFromClientID(clientID);
 	if (player) {
 		Network::Packet packet;
 		packet << Network::Command::PlayerChangeDimension;
@@ -171,7 +171,7 @@ void ServerCommandHandler::sendPlayerChangeDimension(u16 clientID, s32 x, s32 y,
 		logError() << ("Failed to send dimension change for player " + std::to_string(clientID) + ": Player not found").c_str();
 }
 
-void ServerCommandHandler::sendChatMessage(u16 clientID, const std::string &message, const ClientInfo *client) const {
+void ServerCommandHandler::sendChatMessage(u16 clientID, const std::string& message, const ClientInfo* client) const {
 	Network::Packet packet;
 	packet << Network::Command::ChatMessage << clientID << message;
 
@@ -181,7 +181,7 @@ void ServerCommandHandler::sendChatMessage(u16 clientID, const std::string &mess
 		client->tcpSocket->send(packet);
 }
 
-void ServerCommandHandler::sendEntitySpawn(entt::entity entityID, const ClientInfo *client) const {
+void ServerCommandHandler::sendEntitySpawn(entt::entity entityID, const ClientInfo* client) const {
 	Network::Packet packet;
 	packet << Network::Command::EntitySpawn << entityID;
 
@@ -191,7 +191,7 @@ void ServerCommandHandler::sendEntitySpawn(entt::entity entityID, const ClientIn
 		client->tcpSocket->send(packet);
 }
 
-void ServerCommandHandler::sendEntityDespawn(entt::entity entityID, const ClientInfo *client) const {
+void ServerCommandHandler::sendEntityDespawn(entt::entity entityID, const ClientInfo* client) const {
 	Network::Packet packet;
 	packet << Network::Command::EntityDespawn << entityID;
 
@@ -202,7 +202,7 @@ void ServerCommandHandler::sendEntityDespawn(entt::entity entityID, const Client
 }
 
 void ServerCommandHandler::setupCallbacks() {
-	m_server.setConnectionCallback([this](ClientInfo &client, Network::Packet &connectionPacket) {
+	m_server.setConnectionCallback([this](ClientInfo& client, Network::Packet& connectionPacket) {
 		std::string username;
 		connectionPacket >> username;
 
@@ -211,7 +211,7 @@ void ServerCommandHandler::setupCallbacks() {
 			return;
 		}
 
-		ServerPlayer *player = m_players.connectPlayer(username, client, m_server.isSingleplayer());
+		ServerPlayer* player = m_players.connectPlayer(username, client, m_server.isSingleplayer());
 		if (!player) {
 			sendServerClosed("User is already online", &client);
 			return;
@@ -220,35 +220,35 @@ void ServerCommandHandler::setupCallbacks() {
 		// Try to find a valid spawn point (WIP)
 		if (player->isNewPlayer()) {
 			// FIXME: Default dimension hardcoded here
-			ServerWorld &world = m_worldController.getWorld(0);
-			Heightmap &heightmap = world.heightmap();
+			ServerWorld& world = m_worldController.getWorld(0);
+			Heightmap& heightmap = world.heightmap();
 
 			bool hasFoundPosition = false;
-			for (s32 spawnChunkX = 0 ; spawnChunkX < 16 && !hasFoundPosition ; ++spawnChunkX) {
-				for (s32 spawnChunkY = 0 ; spawnChunkY < 16 && !hasFoundPosition ; ++spawnChunkY) {
-					for(int y = 0 ; y < CHUNK_DEPTH && !hasFoundPosition ; y++) {
-						for(int x = 0 ; x < CHUNK_WIDTH ; x++) {
+			for (s32 spawnChunkX = 0; spawnChunkX < 16 && !hasFoundPosition; ++spawnChunkX) {
+				for (s32 spawnChunkY = 0; spawnChunkY < 16 && !hasFoundPosition; ++spawnChunkY) {
+					for (int y = 0; y < CHUNK_DEPTH && !hasFoundPosition; y++) {
+						for (int x = 0; x < CHUNK_WIDTH; x++) {
 							int maxChunkZ = heightmap.getHighestChunkAt(x + spawnChunkX * CHUNK_WIDTH, y + spawnChunkY * CHUNK_DEPTH);
 							int worldZ = heightmap.getHighestBlockAt(x + spawnChunkX * CHUNK_WIDTH, y + spawnChunkY * CHUNK_DEPTH) + 1;
 							int z = math::pmod(worldZ, CHUNK_WIDTH);
 
-							world.generateChunk(world.getOrCreateChunk(spawnChunkX - 1, spawnChunkY,     maxChunkZ));
-							world.generateChunk(world.getOrCreateChunk(spawnChunkX + 1, spawnChunkY,     maxChunkZ));
-							world.generateChunk(world.getOrCreateChunk(spawnChunkX,     spawnChunkY - 1, maxChunkZ));
-							world.generateChunk(world.getOrCreateChunk(spawnChunkX,     spawnChunkY + 1, maxChunkZ));
-							world.generateChunk(world.getOrCreateChunk(spawnChunkX,     spawnChunkY,     maxChunkZ - 1));
-							world.generateChunk(world.getOrCreateChunk(spawnChunkX,     spawnChunkY,     maxChunkZ + 1));
+							world.generateChunk(world.getOrCreateChunk(spawnChunkX - 1, spawnChunkY, maxChunkZ));
+							world.generateChunk(world.getOrCreateChunk(spawnChunkX + 1, spawnChunkY, maxChunkZ));
+							world.generateChunk(world.getOrCreateChunk(spawnChunkX, spawnChunkY - 1, maxChunkZ));
+							world.generateChunk(world.getOrCreateChunk(spawnChunkX, spawnChunkY + 1, maxChunkZ));
+							world.generateChunk(world.getOrCreateChunk(spawnChunkX, spawnChunkY, maxChunkZ - 1));
+							world.generateChunk(world.getOrCreateChunk(spawnChunkX, spawnChunkY, maxChunkZ + 1));
 
-							ServerChunk &chunk = world.getOrCreateChunk(spawnChunkX, spawnChunkY, maxChunkZ);
+							ServerChunk& chunk = world.getOrCreateChunk(spawnChunkX, spawnChunkY, maxChunkZ);
 							world.generateChunk(chunk);
 
-							const BlockState *blockBelow = chunk.getBlockState(x, y, z - 1);
-							const Block &blockFeet = m_registry.getBlock(chunk.getBlock(x, y, z));
-							const Block &blockHead = m_registry.getBlock(chunk.getBlock(x, y, z + 1));
+							const BlockState* blockBelow = chunk.getBlockState(x, y, z - 1);
+							const Block& blockFeet = m_registry.getBlock(chunk.getBlock(x, y, z));
+							const Block& blockHead = m_registry.getBlock(chunk.getBlock(x, y, z + 1));
 
 							if (blockFeet.id() == 0 && blockHead.id() == 0
-							&& blockBelow && blockBelow->isCollidable()
-							&& blockBelow->drawType() != BlockDrawType::Leaves)
+								&& blockBelow && blockBelow->isCollidable()
+								&& blockBelow->drawType() != BlockDrawType::Leaves)
 							{
 								player->setPosition(x + spawnChunkX * CHUNK_WIDTH + .5, y + spawnChunkY * CHUNK_DEPTH + .5, worldZ + .2);
 								hasFoundPosition = true;
@@ -272,9 +272,12 @@ void ServerCommandHandler::setupCallbacks() {
 		client.tcpSocket->send(packet);
 
 		// Send already connected players to the new client
-		for (auto &it : m_players) {
+		for (auto& it : m_players) {
+			if (!it.second.isOnline() || it.second.clientID() == client.id)
+				continue;
+
 			Network::Packet spawnPacket;
-			spawnPacket << Network::Command::PlayerSpawn << it.first;
+			spawnPacket << Network::Command::PlayerSpawn << it.second.clientID();
 			spawnPacket << it.second.x() << it.second.y() << it.second.z() << it.second.dimension() << it.second.name();
 			spawnPacket << it.second.cameraYaw() << it.second.cameraPitch();
 			client.tcpSocket->send(spawnPacket);
@@ -282,7 +285,7 @@ void ServerCommandHandler::setupCallbacks() {
 
 		// Triggers the 'PlayerConnected' Lua event
 		if (player->isNewPlayer())
-			m_scriptEngine.luaCore().onEvent(LuaEventType::PlayerConnected, glm::ivec3{player->x(), player->y(), player->z()}, player, client, *this);
+			m_scriptEngine.luaCore().onEvent(LuaEventType::PlayerConnected, glm::ivec3{ player->x(), player->y(), player->z() }, player, client, *this);
 
 		// Send inventory
 		sendPlayerInvUpdate(client.id, &client);
@@ -296,76 +299,76 @@ void ServerCommandHandler::setupCallbacks() {
 
 		// Send entities to the client
 		m_worldController.getWorld(player->dimension()).scene().sendEntities(client);
-	});
+		});
 
-	m_server.setCommandCallback(Network::Command::ClientDisconnect, [this](ClientInfo &client, Network::Packet &) {
-		ServerPlayer *player = m_players.getPlayerFromClientID(client.id);
+	m_server.setCommandCallback(Network::Command::ClientDisconnect, [this](ClientInfo& client, Network::Packet&) {
+		ServerPlayer* player = m_players.getPlayerFromClientID(client.id);
 		if (player) {
 			player->clearLoadedChunks();
 			m_players.disconnectPlayer(client.playerName);
 		}
-	});
+		});
 
-	m_server.setCommandCallback(Network::Command::ChunkUnload, [this](ClientInfo &client, Network::Packet &packet) {
+	m_server.setCommandCallback(Network::Command::ChunkUnload, [this](ClientInfo& client, Network::Packet& packet) {
 		s32 cx, cy, cz;
 		packet >> cx >> cy >> cz;
 
-		ServerPlayer *player = m_players.getPlayerFromClientID(client.id);
+		ServerPlayer* player = m_players.getPlayerFromClientID(client.id);
 		if (player) {
-			player->removeLoadedChunk(Vector3i{cx, cy, cz});
+			player->removeLoadedChunk(Vector3i{ cx, cy, cz });
 		}
 		else
 			logError() << ("Failed to unload chunk for player " + std::to_string(client.id) + ": Player not found").c_str();
-	});
+		});
 
-	m_server.setCommandCallback(Network::Command::PlayerInvUpdate, [this](ClientInfo &client, Network::Packet &packet) {
-		ServerPlayer *player = m_players.getPlayerFromClientID(client.id);
+	m_server.setCommandCallback(Network::Command::PlayerInvUpdate, [this](ClientInfo& client, Network::Packet& packet) {
+		ServerPlayer* player = m_players.getPlayerFromClientID(client.id);
 		if (player) {
 			packet >> player->inventory();
 		}
 		else
 			logError() << ("Failed to update inventory of player " + std::to_string(client.id) + ": Player not found").c_str();
-	});
+		});
 
-	m_server.setCommandCallback(Network::Command::PlayerPosUpdate, [this](ClientInfo &client, Network::Packet &packet) {
+	m_server.setCommandCallback(Network::Command::PlayerPosUpdate, [this](ClientInfo& client, Network::Packet& packet) {
 		double x, y, z;
 		packet >> x >> y >> z;
 
-		ServerPlayer *player = m_players.getPlayerFromClientID(client.id);
+		ServerPlayer* player = m_players.getPlayerFromClientID(client.id);
 		if (player) {
 			player->setPosition(x, y, z);
 		}
 		else
 			logError() << ("Failed to update position of player " + std::to_string(client.id) + ": Player not found").c_str();
-	});
+		});
 
-	m_server.setCommandCallback(Network::Command::PlayerRotUpdate, [this](ClientInfo &client, Network::Packet &packet) {
+	m_server.setCommandCallback(Network::Command::PlayerRotUpdate, [this](ClientInfo& client, Network::Packet& packet) {
 		float yaw, pitch;
 		packet >> yaw >> pitch;
 
-		ServerPlayer *player = m_players.getPlayerFromClientID(client.id);
+		ServerPlayer* player = m_players.getPlayerFromClientID(client.id);
 		if (player) {
 			player->setRotation(yaw, pitch);
 		}
 		else
 			logError() << ("Failed to update rotation of player " + std::to_string(client.id) + ": Player not found").c_str();
-	});
+		});
 
-	m_server.setCommandCallback(Network::Command::PlayerPlaceBlock, [this](ClientInfo &client, Network::Packet &packet) {
-		ServerPlayer *player = m_players.getPlayerFromClientID(client.id);
+	m_server.setCommandCallback(Network::Command::PlayerPlaceBlock, [this](ClientInfo& client, Network::Packet& packet) {
+		ServerPlayer* player = m_players.getPlayerFromClientID(client.id);
 		if (player) {
 			s32 x, y, z;
 			u32 block;
 			packet >> x >> y >> z >> block;
 
-			ServerWorld &world = getWorldForClient(client.id);
+			ServerWorld& world = getWorldForClient(client.id);
 			world.setData(x, y, z, u16(block >> 16));
 			world.setBlock(x, y, z, u16(block & 0xffff));
 
-			const BlockState *blockState = world.getBlockState(x, y, z);
+			const BlockState* blockState = world.getBlockState(x, y, z);
 			if (!blockState) return;
 
-			m_scriptEngine.luaCore().onEvent(LuaEventType::BlockPlaced, glm::ivec3{x, y, z}, *blockState, *player, world, client, *this);
+			m_scriptEngine.luaCore().onEvent(LuaEventType::BlockPlaced, glm::ivec3{ x, y, z }, *blockState, *player, world, client, *this);
 
 			Network::Packet answer;
 			answer << Network::Command::BlockUpdate << x << y << z << block;
@@ -373,20 +376,20 @@ void ServerCommandHandler::setupCallbacks() {
 		}
 		else
 			logError() << ("Failed to place block using player " + std::to_string(client.id) + ": Player not found").c_str();
-	});
+		});
 
-	m_server.setCommandCallback(Network::Command::PlayerDigBlock, [this](ClientInfo &client, Network::Packet &packet) {
-		ServerPlayer *player = m_players.getPlayerFromClientID(client.id);
+	m_server.setCommandCallback(Network::Command::PlayerDigBlock, [this](ClientInfo& client, Network::Packet& packet) {
+		ServerPlayer* player = m_players.getPlayerFromClientID(client.id);
 		if (player) {
 			s32 x, y, z;
 			packet >> x >> y >> z;
 
-			ServerWorld &world = getWorldForClient(client.id);
-			const BlockState *blockState = world.getBlockState(x, y, z);
+			ServerWorld& world = getWorldForClient(client.id);
+			const BlockState* blockState = world.getBlockState(x, y, z);
 			if (!blockState) return;
 			world.setBlock(x, y, z, 0);
 
-			m_scriptEngine.luaCore().onEvent(LuaEventType::BlockDigged, glm::ivec3{x, y, z}, *blockState, *player, world, client, *this);
+			m_scriptEngine.luaCore().onEvent(LuaEventType::BlockDigged, glm::ivec3{ x, y, z }, *blockState, *player, world, client, *this);
 
 			Network::Packet answer;
 			answer << Network::Command::BlockUpdate << x << y << z << u32(0);
@@ -394,10 +397,10 @@ void ServerCommandHandler::setupCallbacks() {
 		}
 		else
 			logError() << ("Failed to dig block using player " + std::to_string(client.id) + ": Player not found").c_str();
-	});
+		});
 
-	m_server.setCommandCallback(Network::Command::PlayerHeldItemChanged, [this](ClientInfo &client, Network::Packet &packet) {
-		ServerPlayer *player = m_players.getPlayerFromClientID(client.id);
+	m_server.setCommandCallback(Network::Command::PlayerHeldItemChanged, [this](ClientInfo& client, Network::Packet& packet) {
+		ServerPlayer* player = m_players.getPlayerFromClientID(client.id);
 		if (player) {
 			u8 hotbarSlot;
 			u16 itemID;
@@ -409,96 +412,96 @@ void ServerCommandHandler::setupCallbacks() {
 		}
 		else
 			logError() << ("Failed to change held item of player " + std::to_string(client.id) + ": Player not found").c_str();
-	});
+		});
 
-	m_server.setCommandCallback(Network::Command::PlayerReady, [this](ClientInfo &client, Network::Packet &) {
-		ServerPlayer *player = m_players.getPlayerFromClientID(client.id);
+	m_server.setCommandCallback(Network::Command::PlayerReady, [this](ClientInfo& client, Network::Packet&) {
+		ServerPlayer* player = m_players.getPlayerFromClientID(client.id);
 		if (player) {
 			player->setReady(true);
 		}
 		else
 			logError() << ("Failed to change held item of player " + std::to_string(client.id) + ": Player not found").c_str();
-	});
+		});
 
-	m_server.setCommandCallback(Network::Command::PlayerChunkPosUpdate, [this](ClientInfo &client, Network::Packet &packet) {
-		ServerPlayer *player = m_players.getPlayerFromClientID(client.id);
+	m_server.setCommandCallback(Network::Command::PlayerChunkPosUpdate, [this](ClientInfo& client, Network::Packet& packet) {
+		ServerPlayer* player = m_players.getPlayerFromClientID(client.id);
 		if (player) {
 			s32 chunkX, chunkY, chunkZ;
 			packet >> chunkX >> chunkY >> chunkZ;
 
-			ServerWorld &world = getWorldForClient(client.id);
+			ServerWorld& world = getWorldForClient(client.id);
 			world.updatePlayerChunks(*player, chunkX, chunkY, chunkZ);
 		}
 		else
 			logError() << ("Failed to update chunk position of player " + std::to_string(client.id) + ": Player not found").c_str();
-	});
+		});
 
-	m_server.setCommandCallback(Network::Command::BlockActivated, [this](ClientInfo &client, Network::Packet &packet) {
-		ServerPlayer *player = m_players.getPlayerFromClientID(client.id);
+	m_server.setCommandCallback(Network::Command::BlockActivated, [this](ClientInfo& client, Network::Packet& packet) {
+		ServerPlayer* player = m_players.getPlayerFromClientID(client.id);
 		if (player) {
 			s32 x, y, z;
 			packet >> x >> y >> z >> client.screenWidth >> client.screenHeight >> client.guiScale;
 
-			ServerWorld &world = getWorldForClient(client.id);
+			ServerWorld& world = getWorldForClient(client.id);
 
 			u16 id = world.getBlock(x, y, z);
-			ServerBlock &block = (ServerBlock &)(m_registry.getBlock(id));
-			bool hasBeenActivated = block.onBlockActivated({x, y, z}, *player, world, client, *this);
+			ServerBlock& block = (ServerBlock&)(m_registry.getBlock(id));
+			bool hasBeenActivated = block.onBlockActivated({ x, y, z }, *player, world, client, *this);
 
 			if (hasBeenActivated)
-				m_scriptEngine.luaCore().onEvent(LuaEventType::BlockActivated, glm::ivec3{x, y, z}, block, *player, world, client, *this);
+				m_scriptEngine.luaCore().onEvent(LuaEventType::BlockActivated, glm::ivec3{ x, y, z }, block, *player, world, client, *this);
 		}
 		else
 			logError() << ("Failed to activate block using player '" + client.playerName + "': Player not found").c_str();
-	});
+		});
 
-	m_server.setCommandCallback(Network::Command::BlockInvUpdate, [this](ClientInfo &client, Network::Packet &packet) {
+	m_server.setCommandCallback(Network::Command::BlockInvUpdate, [this](ClientInfo& client, Network::Packet& packet) {
 		Vector3<s32> pos;
 		packet >> pos.x >> pos.y >> pos.z;
 
-		BlockData *data = getWorldForClient(client.id).getBlockData(pos.x, pos.y, pos.z);
+		BlockData* data = getWorldForClient(client.id).getBlockData(pos.x, pos.y, pos.z);
 		if (data)
 			packet >> data->inventory;
 		else
 			logError() << "BlockInvUpdate: No block data found at" << pos.x << pos.y << pos.z;
-	});
+		});
 
-	m_server.setCommandCallback(Network::Command::BlockDataUpdate, [this](ClientInfo &client, Network::Packet &packet) {
+	m_server.setCommandCallback(Network::Command::BlockDataUpdate, [this](ClientInfo& client, Network::Packet& packet) {
 		Vector3<s32> pos;
 		packet >> pos.x >> pos.y >> pos.z;
 
-		BlockData *data = getWorldForClient(client.id).getBlockData(pos.x, pos.y, pos.z);
+		BlockData* data = getWorldForClient(client.id).getBlockData(pos.x, pos.y, pos.z);
 		if (data) {
 			packet >> data->meta;
 		}
 		else
 			logError() << "BlockDataUpdate: No block data found at" << pos.x << pos.y << pos.z;
-	});
+		});
 
-	m_server.setCommandCallback(Network::Command::ItemActivated, [this](ClientInfo &client, Network::Packet &packet) {
-		ServerPlayer *player = m_players.getPlayerFromClientID(client.id);
+	m_server.setCommandCallback(Network::Command::ItemActivated, [this](ClientInfo& client, Network::Packet& packet) {
+		ServerPlayer* player = m_players.getPlayerFromClientID(client.id);
 		if (player) {
 			s32 x, y, z;
 			packet >> x >> y >> z >> client.screenWidth >> client.screenHeight >> client.guiScale;
 
-			ServerWorld &world = getWorldForClient(client.id);
+			ServerWorld& world = getWorldForClient(client.id);
 
 			u16 id = world.getBlock(x, y, z);
-			ServerBlock &block = (ServerBlock &)(m_registry.getBlock(id));
+			ServerBlock& block = (ServerBlock&)(m_registry.getBlock(id));
 
-			ServerItem &item = (ServerItem &)player->heldItemStack().item();
+			ServerItem& item = (ServerItem&)player->heldItemStack().item();
 			if (item.canBeActivated()) {
-				bool hasBeenActivated = item.onItemActivated({x, y, z}, block, *player, world, client, *this);
+				bool hasBeenActivated = item.onItemActivated({ x, y, z }, block, *player, world, client, *this);
 
 				if (hasBeenActivated)
-					m_scriptEngine.luaCore().onEvent(LuaEventType::ItemActivated, glm::ivec3{x, y, z}, block, *player, world, client, *this);
+					m_scriptEngine.luaCore().onEvent(LuaEventType::ItemActivated, glm::ivec3{ x, y, z }, block, *player, world, client, *this);
 			}
 		}
 		else
 			logError() << ("Failed to activate item using player '" + client.playerName + "': Player not found").c_str();
-	});
+		});
 
-	m_server.setCommandCallback(Network::Command::ChatMessage, [this](ClientInfo &client, Network::Packet &packet) {
+	m_server.setCommandCallback(Network::Command::ChatMessage, [this](ClientInfo& client, Network::Packet& packet) {
 		std::string message;
 		packet >> message;
 
@@ -511,26 +514,26 @@ void ServerCommandHandler::setupCallbacks() {
 		else {
 			m_chatCommandHandler.parseCommand(message.substr(1), client);
 		}
-	});
+		});
 
-	m_server.setCommandCallback(Network::Command::KeyPressed, [this](ClientInfo &client, Network::Packet &packet) {
+	m_server.setCommandCallback(Network::Command::KeyPressed, [this](ClientInfo& client, Network::Packet& packet) {
 		u16 keyID;
 		packet >> keyID >> client.screenWidth >> client.screenHeight >> client.guiScale;
 
 		m_registry.getKey(keyID).callback()(keyID, client);
-	});
+		});
 }
 
 void ServerCommandHandler::setPlayerPosition(u16 clientID, s32 x, s32 y, s32 z) {
-	ServerPlayer *player = m_players.getPlayerFromClientID(clientID);
+	ServerPlayer* player = m_players.getPlayerFromClientID(clientID);
 	if (player)
 		player->setPosition(x, y, z);
 	else
 		logError() << ("Failed to set position for player " + std::to_string(clientID) + ": Player not found").c_str();
 }
 
-inline ServerWorld &ServerCommandHandler::getWorldForClient(u16 clientID) {
-	ServerPlayer *player = m_players.getPlayerFromClientID(clientID);
+inline ServerWorld& ServerCommandHandler::getWorldForClient(u16 clientID) {
+	ServerPlayer* player = m_players.getPlayerFromClientID(clientID);
 	if (!player)
 		throw EXCEPTION("Player instance not found for client", clientID);
 
@@ -542,9 +545,9 @@ void ServerCommandHandler::stopServer() const {
 }
 
 // Please update 'docs/lua-api-cpp.md' if you change this
-void ServerCommandHandler::initUsertype(sol::state &lua) {
+void ServerCommandHandler::initUsertype(sol::state& lua) {
 	lua.new_usertype<ServerCommandHandler>("ServerCommandHandler",
 		"send_player_change_dimension", &ServerCommandHandler::sendPlayerChangeDimension,
 		"send_chat_message", &ServerCommandHandler::sendChatMessage
-	);
+		);
 }

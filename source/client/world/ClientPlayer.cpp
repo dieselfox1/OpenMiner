@@ -37,10 +37,10 @@
 #include "client/world/ClientPlayer.hpp"
 #include "client/world/ClientWorld.hpp"
 
-ClientPlayer *ClientPlayer::s_instance = nullptr;
+ClientPlayer* ClientPlayer::s_instance = nullptr;
 
-ClientPlayer::ClientPlayer(Camera &camera) : m_camera(camera) {
-	m_cameraLocalPos = Vector3f{0.f, 0.f, 1.625f};
+ClientPlayer::ClientPlayer(Camera& camera) : m_camera(camera) {
+	m_cameraLocalPos = Vector3f{ 0.f, 0.f, 1.625f };
 
 	updateCamera();
 
@@ -78,9 +78,9 @@ void ClientPlayer::updateCamera() {
 	float cr = cosf(viewAngleRoll * math::DEG_TO_RADf);
 	float sr = sinf(viewAngleRoll * math::DEG_TO_RADf);
 
-	m_forwardDir = Vector3f{ch * cv, sh * cv, sv};
+	m_forwardDir = Vector3f{ ch * cv, sh * cv, sv };
 	m_camera.setDirection(m_forwardDir);
-	m_camera.setUpVector(Vector3f{sh * sr - ch * sv * cr, -ch * sr - sh * sv * cr, cv * cr});
+	m_camera.setUpVector(Vector3f{ sh * sr - ch * sv * cr, -ch * sr - sh * sv * cr, cv * cr });
 }
 
 void ClientPlayer::move(float direction) {
@@ -93,28 +93,28 @@ void ClientPlayer::move(float direction) {
 }
 
 void ClientPlayer::processInputs() {
-	if(GamePad::isKeyPressed(GameKey::Jump) && !m_isJumping) {
+	if (GamePad::isKeyPressed(GameKey::Jump) && !m_isJumping) {
 		m_isJumping = true;
 		m_velocity.z = m_jumpSpeed;
 	}
 
-	if(GamePad::isKeyPressed(GameKey::Fly)) {
+	if (GamePad::isKeyPressed(GameKey::Fly)) {
 		m_velocity.z = 0.1f;
 	}
 
-	if(GamePad::isKeyPressed(GameKey::Sneak)) {
+	if (GamePad::isKeyPressed(GameKey::Sneak)) {
 		m_velocity.z = -0.1f;
 	}
 
-	if(GamePad::isKeyPressed(GameKey::Forward))    move(0.0f);
-	else if(GamePad::isKeyPressed(GameKey::Back))  move(180.0f);
+	if (GamePad::isKeyPressed(GameKey::Forward))    move(0.0f);
+	else if (GamePad::isKeyPressed(GameKey::Back))  move(180.0f);
 
-	if(GamePad::isKeyPressed(GameKey::Left))       move(90.0f);
-	else if(GamePad::isKeyPressed(GameKey::Right)) move(-90.0f);
+	if (GamePad::isKeyPressed(GameKey::Left))       move(90.0f);
+	else if (GamePad::isKeyPressed(GameKey::Right)) move(-90.0f);
 
-	if (GamePad::isKeyPressed(GameKey::Left)  && GamePad::isKeyPressed(GameKey::Forward)) move(45.0f);
+	if (GamePad::isKeyPressed(GameKey::Left) && GamePad::isKeyPressed(GameKey::Forward)) move(45.0f);
 	if (GamePad::isKeyPressed(GameKey::Right) && GamePad::isKeyPressed(GameKey::Forward)) move(-45.0f);
-	if (GamePad::isKeyPressed(GameKey::Left)  && GamePad::isKeyPressed(GameKey::Back))    move(135.0f);
+	if (GamePad::isKeyPressed(GameKey::Left) && GamePad::isKeyPressed(GameKey::Back))    move(135.0f);
 	if (GamePad::isKeyPressed(GameKey::Right) && GamePad::isKeyPressed(GameKey::Back))    move(-135.0f);
 
 	if (GamePad::isKeyPressed(GameKey::Sprint)) {
@@ -123,8 +123,8 @@ void ClientPlayer::processInputs() {
 	}
 }
 
-void ClientPlayer::updatePosition(const ClientWorld &world) {
-	ClientChunk *chunk = (ClientChunk *)world.getChunkAtBlockPos((int)m_x, (int)m_y, (int)m_z);
+void ClientPlayer::updatePosition(const ClientWorld& world) {
+	ClientChunk* chunk = (ClientChunk*)world.getChunkAtBlockPos((int)m_x, (int)m_y, (int)m_z);
 	if (chunk && chunk->isInitialized()) {
 		if (!Config::isFlyModeEnabled) {
 			m_velocity.z -= chunk->dimension().gravity() * 0.001f;
@@ -168,7 +168,7 @@ void ClientPlayer::updatePosition(const ClientWorld &world) {
 		m_velocity.z = 0.f;
 
 	// Checking to block at camera position to enable specific effects
-	const BlockState *blockState = world.getBlockState((int)m_camera.getDPosition().x, (int)m_camera.getDPosition().y, (int)m_camera.getDPosition().z);
+	const BlockState* blockState = world.getBlockState((int)m_camera.getDPosition().x, (int)m_camera.getDPosition().y, (int)m_camera.getDPosition().z);
 	if (blockState && blockState->fogDepth() != 0) {
 		GameConfig::currentScreenEffect = 1;
 		GameConfig::fogDepth = blockState->fogDepth();
@@ -192,8 +192,8 @@ void ClientPlayer::setPosition(double x, double y, double z) {
 	m_camera.setDPosition(m_x + camPos.x, m_y + camPos.y, m_z + camPos.z);
 }
 
-void ClientPlayer::checkCollisions(const ClientWorld &world) {
-	Vector3d corner{m_x + m_hitbox.x, m_y + m_hitbox.y, m_z + m_hitbox.z};
+void ClientPlayer::checkCollisions(const ClientWorld& world) {
+	Vector3d corner{ m_x + m_hitbox.x, m_y + m_hitbox.y, m_z + m_hitbox.z };
 
 	constexpr int numPointsPerEdge = 3;
 	constexpr int lastPoint = numPointsPerEdge - 1;
@@ -203,28 +203,28 @@ void ClientPlayer::checkCollisions(const ClientWorld &world) {
 			for (int x = 0; x <= lastPoint; x++) {
 				if (x == 0 || x == lastPoint || y == 0 || y == lastPoint || z == 0 || z == lastPoint)
 					testPoint(world, corner.x + m_hitbox.sizeX * ((double)x / lastPoint),
-					          corner.y + m_hitbox.sizeY * ((double)y / lastPoint),
-					          corner.z + m_hitbox.sizeZ * ((double)z / lastPoint), m_velocity);
+						corner.y + m_hitbox.sizeY * ((double)y / lastPoint),
+						corner.z + m_hitbox.sizeZ * ((double)z / lastPoint), m_velocity);
 			}
 		}
 	}
 }
 
-bool passable(const ClientWorld &world, double x, double y, double z) {
-	const BlockState *blockState = world.getBlockState((int)floor(x), (int)floor(y), (int)floor(z));
+bool passable(const ClientWorld& world, double x, double y, double z) {
+	const BlockState* blockState = world.getBlockState((int)floor(x), (int)floor(y), (int)floor(z));
 	return !blockState || !blockState->block().id() || !blockState->isCollidable();
 }
 
-void ClientPlayer::testPoint(const ClientWorld &world, double x, double y, double z, Vector3f &vel) {
-	if(!passable(world, x + vel.x, y, z)) vel.x = 0.f;
-	if(!passable(world, x, y + vel.y, z)) vel.y = 0.f;
-	if(!passable(world, x, y, z + vel.z)) {
-		if(vel.z < 0.f && m_isJumping) m_isJumping = false;
+void ClientPlayer::testPoint(const ClientWorld& world, double x, double y, double z, Vector3f& vel) {
+	if (!passable(world, x + vel.x, y, z)) vel.x = 0.f;
+	if (!passable(world, x, y + vel.y, z)) vel.y = 0.f;
+	if (!passable(world, x, y, z + vel.z)) {
+		if (vel.z < 0.f && m_isJumping) m_isJumping = false;
 		vel.z = 0.f;
 	}
 }
 
-void ClientPlayer::applyViewBobbing(float &viewAngleH, float &viewAngleV, float &viewAngleRoll) {
+void ClientPlayer::applyViewBobbing(float& viewAngleH, float& viewAngleV, float& viewAngleRoll) {
 	if (!m_velocity.isZero() && m_velocity.z == 0 && !Config::isFlyModeEnabled) {
 		if (!m_isMoving) {
 			m_movementStartTime = GameClock::getInstance().getTicks();
